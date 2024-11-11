@@ -146,6 +146,59 @@ type DiagnoseOptions struct {
 	DBPath       string
 }
 
+// BatchJoinOptions has the kubeedge batch join information filled by CLI
+type BatchJoinOptions struct {
+	ConfigFile string
+}
+
+// Node defines the node information used in batch-join config file
+type Node struct {
+	NodeName      string  `yaml:"nodeName"`
+	Arch          string  `yaml:"arch"`
+	KeadmCmd      string  `yaml:"keadmCmd"`
+	UploadFileDir *string `yaml:"uploadFileDir,omitempty"`
+	SSH           SSH     `yaml:"ssh"`
+}
+
+type SSH struct {
+	IP       string     `yaml:"ip"`
+	Username string     `yaml:"username"`
+	SSHPort  int        `yaml:"sshPort"`
+	Auth     AuthConfig `yaml:"auth"`
+}
+
+type AuthConfig struct {
+	Type           string          `yaml:"type"`
+	PasswordAuth   *PasswordAuth   `yaml:"passwordAuth,omitempty"`
+	PrivateKeyAuth *PrivateKeyAuth `yaml:"privateKeyAuth,omitempty"`
+}
+
+type PasswordAuth struct {
+	Password string `yaml:"password"`
+}
+
+type PrivateKeyAuth struct {
+	PrivateKey string `yaml:"privateKey"`
+}
+
+// Config defines the batch-join config file format
+type Config struct {
+	Keadm     Keadm  `yaml:"keadm"`
+	Nodes     []Node `yaml:"nodes"`
+	MaxRunNum int    `yaml:"maxRunNum"`
+}
+
+type Keadm struct {
+	Download          Download `yaml:"download"`
+	KeadmVersion      string   `yaml:"keadmVersion"`
+	ArchGroup         []string `yaml:"archGroup"`
+	OfflinePackageDir *string  `yaml:"offlinePackageDir,omitempty"`
+}
+
+type Download struct {
+	Enable bool `yaml:"enable"`
+}
+
 type DiagnoseObject struct {
 	Desc string
 	Use  string
